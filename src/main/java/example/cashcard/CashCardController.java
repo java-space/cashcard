@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequestMapping("/cashcards")
 public class CashCardController {
 
-    private CashCardRepository cashCardRepository;
+    private final CashCardRepository cashCardRepository;
 
     public CashCardController(CashCardRepository cashCardRepository) {
         this.cashCardRepository = cashCardRepository;
@@ -26,11 +26,7 @@ public class CashCardController {
     @GetMapping("/{requestedId}")
     public ResponseEntity<CashCard> findById(@PathVariable Long requestedId, Principal principal) {
         Optional<CashCard> cashCardOptional = Optional.ofNullable(cashCardRepository.findByIdAndOwner(requestedId, principal.getName()));
-        if (cashCardOptional.isPresent()) {
-            return ResponseEntity.ok(cashCardOptional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return cashCardOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
      }
 
     @PostMapping
