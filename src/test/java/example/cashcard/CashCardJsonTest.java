@@ -48,7 +48,8 @@ public class CashCardJsonTest {
         String expected = """
                 {
                     "id": 99,
-                    "amount": 123.45
+                    "amount": 123.45,
+                    "owner": "sarah1"
                 }
                 """;
         assertThat(json.parse(expected))
